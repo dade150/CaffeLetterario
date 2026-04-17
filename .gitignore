@@ -1,0 +1,20 @@
+# --- IntelliJ ---
+.idea/
+*.iml
+out/
+gen/
+
+# --- NetBeans (residui del vecchio progetto) ---
+nbproject/
+build/
+dist/
+
+# --- Smart Tomcat & Server ---
+.smarttomcat/
+temp/
+work/
+logs/
+
+# --- Sistema Operativo ---
+.DS_Store
+Thumbs.db
