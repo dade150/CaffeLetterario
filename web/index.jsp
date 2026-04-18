@@ -95,6 +95,28 @@
                     </p>
                 </section>
 
+                <section class="mb-5 py-5 px-3">
+                    <h2 class="mb-4 display-6" style="color: #535353;">Cosa dicono di noi</h2>
+                    <div class="row g-3">
+                        <c:forEach var="r" items="${recensioni}">
+                            <div class="col-md-4">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-dark">
+                                            Valutazione: <c:out value="${r.valutazione}"/> / 5
+                                        </h5>
+                                        <p class="card-text">"${r.testo}"</p>
+                                        <p class="text-muted small">- ${r.utente.username}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+
+                        <c:if test="${empty recensioni}">
+                            <p class="text-center italic">Ancora nessuna recensione. Sii il primo!</p>
+                        </c:if>
+                    </div>
+                </section>
             </div>
 
 

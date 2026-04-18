@@ -46,7 +46,4 @@ public class Recensione {
     public void setTesto(String testo) {
         this.testo = testo;
     }
-    
-    
-    
 }

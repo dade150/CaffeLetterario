@@ -23,38 +23,40 @@ public class RecensioneDao {
     private final UtenteDao utenteDao = new UtenteDao();
 
     public List<Recensione> visualizzaRecensioni() throws SQLException {
+        // Specifichiamo i nomi delle colonne e usiamo degli alias (as) per gli ID
+        String sql = "SELECT r.id as rec_id, r.testo, r.valutazione, r.utente_id, " +
+                "u.id as ut_id, u.nome, u.cognome, u.email, u.username, u.telefono, u.data_nascita, u.password " +
+                "FROM recensioni r JOIN Utenti u ON u.id = r.utente_id";
 
-        String sql = "SELECT * FROM RECENSIONI r join Utenti u on u.id=r.utente_id";
         List<Recensione> recensioni = new ArrayList<>();
 
-        try (Connection conn = DBConnection.getConnection()) {
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            ResultSet rs = pstm.executeQuery();
-            {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstm = conn.prepareStatement(sql);
+             ResultSet rs = pstm.executeQuery()) {
 
-                while (rs.next()) {
-                    Recensione recensione = new Recensione();
-                    recensione.setId(rs.getInt("r.id"));
-                    recensione.setTesto(rs.getString("testo"));
-                    recensione.setValutazione(rs.getInt("valutazione"));
+            while (rs.next()) {
+                Recensione recensione = new Recensione();
+                // Usiamo l'alias 'rec_id' definito nella query
+                recensione.setId(rs.getInt("rec_id"));
+                recensione.setTesto(rs.getString("testo"));
+                recensione.setValutazione(rs.getInt("valutazione"));
 
-                    Utente utente = new Utente();
-                    utente.setId(rs.getInt("u.id"));
-                    utente.setNome(rs.getString("u.nome"));
-                    utente.setCognome(rs.getString("u.cognome"));
-                    utente.setEmail(rs.getString("u.email"));
-                    utente.setUsername(rs.getString("u.username"));
-                    utente.setTelefono(rs.getString("u.telefono"));
-                    utente.setDataNascita(rs.getDate("u.data_nascita"));
-                    utente.setPassword(rs.getString("u.password"));
+                Utente utente = new Utente();
+                // Usiamo l'alias 'ut_id'
+                utente.setId(rs.getInt("ut_id"));
+                utente.setNome(rs.getString("nome"));
+                utente.setCognome(rs.getString("cognome"));
+                utente.setEmail(rs.getString("email"));
+                utente.setUsername(rs.getString("username"));
+                utente.setTelefono(rs.getString("telefono"));
+                utente.setDataNascita(rs.getDate("data_nascita"));
+                utente.setPassword(rs.getString("password"));
 
-                    recensione.setUtente(utente);
-                    recensioni.add(recensione);
-                }
-
+                recensione.setUtente(utente);
+                recensioni.add(recensione);
             }
-            return recensioni;
         }
+        return recensioni;
     }
 
     public void addRecensione(String username, String password, String testo, int valutazione) throws SQLException {
@@ -74,6 +76,5 @@ public class RecensioneDao {
             pstmt.setString(3, testo);
             pstmt.executeUpdate();
         }
-
     }
 }

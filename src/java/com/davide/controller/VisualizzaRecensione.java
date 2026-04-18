@@ -41,11 +41,23 @@ public class VisualizzaRecensione extends HttpServlet {
             throws ServletException, IOException {
         try {
             List<Recensione> recensioni = dao.visualizzaRecensioni();
+
+            if (recensioni == null) {
+                recensioni = new ArrayList<>();
+            }
+
             request.setAttribute("recensioni", recensioni);
-            request.getRequestDispatcher("prenotatavolocliente.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(VisualizzaRecensione.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+
+        }  catch (SQLException ex) {
+        // Invece del logger complicato di Tomcat, usa un semplice print per il debug
+        System.err.println("Errore Database nelle Recensioni: " + ex.getMessage());
+        ex.printStackTrace();
+
+        request.setAttribute("recensioni", new ArrayList<Recensione>());
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+    }
     }
 
     /**
@@ -69,8 +81,13 @@ public class VisualizzaRecensione extends HttpServlet {
             dao.addRecensione(username, password, testo, valutazione);
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(VisualizzaRecensione.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Invece del logger complicato di Tomcat, usa un semplice print per il debug
+        System.err.println("Errore Database nelle Recensioni: " + ex.getMessage());
+        ex.printStackTrace();
+
+        request.setAttribute("recensioni", new ArrayList<Recensione>());
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+    }
     }
 
     /**
